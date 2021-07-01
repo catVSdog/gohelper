@@ -1,5 +1,6 @@
 package str
 
+import "unicode"
 
 func IsUpper(a string) bool {
 	area := map[string]struct{}{
@@ -11,7 +12,6 @@ func IsUpper(a string) bool {
 	return ok
 }
 
-
 func IsLower(a string) bool {
 	area := map[string]struct{}{
 		"a": {}, "b": {}, "c": {}, "d": {}, "e": {}, "f": {}, "g": {}, "h": {}, "i": {}, "j": {}, "k": {}, "l": {},
@@ -20,4 +20,14 @@ func IsLower(a string) bool {
 	}
 	_, ok := area[a]
 	return ok
+}
+
+func IsAlphanumeric(a string) bool {
+	aRune := []rune(a)
+	for _, v := range aRune {
+		if !unicode.IsLetter(v) && !unicode.IsNumber(v) {
+			return false
+		}
+	}
+	return true
 }

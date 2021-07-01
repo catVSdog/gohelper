@@ -1,81 +1,55 @@
-package str
+package str_test
 
 import (
-	"fmt"
+	"helper/str"
 	"testing"
-
-	. "gopkg.in/check.v1"
 )
 
-func Test(t *testing.T) { TestingT(t) }
-
-type StringSuit struct {}
-
-var _ = Suite(&StringSuit{})
-
-
-// IsUpperCheckInfo 实现自定义checker
-type IsUpperCheckInfo struct {
-	*CheckerInfo
-}
-
-func (u *IsUpperCheckInfo) Check(params []interface{}, names []string) (result bool, error string){
-	testString := params[0]
-	str ,ok := testString.(string)
-	if !ok {
-		return false, fmt.Sprintf("%s not a string", testString)
+func TestIsAlphanumericWhenPass(t *testing.T) {
+	a := "abc123"
+	if !str.IsAlphanumeric(a) {
+		t.Error("IsAlphanumericWhenPass failed")
 	}
-	if IsUpper(str){
-		return true, ""
+}
+
+func TestIsAlphanumericWhenChinese(t *testing.T) {
+	a := "你好"
+	if !str.IsAlphanumeric(a) {
+		t.Error("IsAlphanumericWhenPass failed")
 	}
-	return false, fmt.Sprintf("%s not a Upper string", testString)
 }
 
-var isUpperChecker = &IsUpperCheckInfo{
-	&CheckerInfo{Name: "isUpper", Params: []string{"value"}},
-}
-
-func (s *StringSuit)TestIsUpperWhenPass(c *C) {
-	c.Assert("A",isUpperChecker)
-}
-
-func (s *StringSuit)TestIsUpperWhenNotPass(c *C) {
-	c.Assert("a", Not(isUpperChecker))
-}
-
-func (s *StringSuit)TestIsUpperWhenNotString(c *C) {
-	c.Assert(1, Not(isUpperChecker))
-}
-
-// IsLowerCheckInfo 实现自定义checker
-type IsLowerCheckInfo struct {
-	*CheckerInfo
-}
-
-func (u *IsLowerCheckInfo) Check(params []interface{}, names []string) (result bool, error string){
-	testString := params[0]
-	str, ok := testString.(string)
-	if !ok {
-		return false, fmt.Sprintf("%s not a string", testString)
+func TestIsAlphanumericFailed(t *testing.T) {
+	a := "]d3!"
+	if str.IsAlphanumeric(a) {
+		t.Error("IsAlphanumericFailed failed")
 	}
-	if IsLower(str){
-		return true, ""
+}
+
+func TestIsUpperWhenPass(t *testing.T) {
+	a := "A"
+	if !str.IsUpper(a) {
+		t.Error("IsUpperWhenPass failed")
 	}
-	return false, fmt.Sprintf("%s not a Lower string", testString)
 }
 
-var isLowerChecker = &IsLowerCheckInfo{
-	&CheckerInfo{Name: "isLower", Params: []string{"value"}},
+func TestIsUpperWhenFailed(t *testing.T) {
+	a := "a"
+	if str.IsUpper(a) {
+		t.Error("IsUpperWhenFailed failed")
+	}
 }
 
-func (s *StringSuit)TestIsLowerWhenPass(c *C) {
-	c.Assert("a",isLowerChecker)
+func TestIsLowerWhenPass(t *testing.T) {
+	a := "a"
+	if !str.IsLower(a) {
+		t.Error("IsLowerWhenPass failed")
+	}
 }
 
-func (s *StringSuit)TestIsLowerWhenNotPass(c *C) {
-	c.Assert("A", Not(isLowerChecker))
-}
-
-func (s *StringSuit)TestIsLowerWhenNotString(c *C) {
-	c.Assert(true, Not(isLowerChecker))
+func TestIsLowerWhenFailed(t *testing.T) {
+	a := "A"
+	if str.IsLower(a) {
+		t.Error("IsLowerWhenFailed failed")
+	}
 }
