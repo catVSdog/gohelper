@@ -3,9 +3,13 @@ package slice
 import (
 	"helper/utils"
 	"reflect"
+	"sync"
 )
 
 func IsContained(container interface{}, item interface{}) (res bool, err error) {
+	lock := sync.RWMutex{}
+	lock.RLock()
+	defer lock.RUnlock()
 	defer func() {
 		if pac := recover(); pac != nil {
 			err = pac.(error)
